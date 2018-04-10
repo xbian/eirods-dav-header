@@ -1,0 +1,107 @@
+<!-- site -->
+<script type="text/javascript" src="scripts/script.js"></script>
+
+<!-- font awesome -->
+<link href="scripts/fontawesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+
+<!-- jQuery -->
+<script type="text/javascript" src="scripts/jquery-1.11.3.min.js"></script>
+
+<!--&lt;!&ndash; bootstrap &ndash;&gt;-->
+<!--<script src="scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>-->
+<!--<link href="scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>-->
+
+
+<header>
+    <img class="logo" alt="The Earlham Institute"
+         src="https://grassroots.tools/eirods_dav_files/images/earlham-institute-logo.png"><br/>Welcome to public data
+    at the Earlham Institute
+
+    <div id="projectName"></div>
+
+    <div id="description"></div>
+
+    <div id="poi"></div>
+
+
+    <div id="license">
+
+    </div>
+
+
+    <div id="torronto" style="visibility: hidden ! improtant;">
+        All of the data listed here is available under the prepublication data sharing principle of the <a
+            href="https://www.nature.com/articles/461168a">Toronto agreement</a>.
+        By using this data, you agree to:
+
+        <ul>
+            <li>respect the rights of the data producers and contributors to analyze and publish the first global
+                analyses and certain other reserved analyses of this data set in a peer-reviewed publication.
+            </li>
+            <li>not redistribute, release, or otherwise provide access to the data to anyone outside of the group, until
+                the data has been published &amp; submitted to the public data repositories.
+            </li>
+            <li>contact the authors to discuss any plans to publish data or analyses that utilize this data to avoid the
+                overlap of any planned analyses.
+            </li>
+            <li>fully cite the prepublication data along with any applicable versioning details.</li>
+            <li>understand that this data as accessed is precompetitive and is not patentable in its present state.</li>
+        </ul>
+        This agreement does not expire by time but only upon publication of the first global analysis by the data
+        producers and contributors.
+    </div>
+</header>
+
+<script type="text/javascript">
+
+    //remove when integration to eirods-dav
+    var G_METADATA_API_URL_S = "/data/api/metadata/";
+
+    var elasticsearch_url = "/elastic-search/irods/project/";
+
+
+    $(document).ready(function () {
+
+        var rest_url = G_METADATA_API_URL_S + "get?id=" + irods_id + "&output_format=json";
+
+        var project_uuid;
+        $.ajax(rest_url, {
+            dataType: "json",
+            success: function (data, status) {
+                if (status === "success") {
+                    var jsonArray = data;
+                    $.each(jsonArray, function(i, jsonObject) {
+                        if (jsonObject.atrribute == "project_uuid"){
+                            project_uuid == jsonObject.value;
+
+                        }
+                    })
+
+                }
+            }
+        });
+
+    //test
+        project_uuid = "testuuid";
+
+        $.ajax(elasticsearch_url + project_uuid, {
+            dataType: "json",
+            success: function (data, status) {
+                if (status === "success") {
+                    $('#projectName').html(data["projectName"]);
+                    $('#description').html(data["description"]);
+                    $('#poi').html(data["poi"]);
+                    if (data["license"] = "torront"){
+
+                        $('#license').html($('#torronto').html());
+                    } else {
+                        $('#license').html(data["license"]);
+                    }
+
+                }
+            }
+        });
+    });
+
+
+</script>
