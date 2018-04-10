@@ -1,5 +1,5 @@
 <!-- site -->
-<script type="text/javascript" src="header-scripts/script.js"></script>
+<script type="text/javascript" src="/eirods_dav_files/header-scripts/script.js"></script>
 
 <!-- font awesome -->
 <link href="/eirods_dav_files/header-scripts/fontawesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
@@ -21,7 +21,7 @@
         color: #18bc9c ! important;
     }
 
-    .text-primary{
+    .text-primary {
         color: rgba(198, 31, 22, 1) ! important;
     }
 
@@ -74,9 +74,9 @@
         </div>
         </p>
 
-        <div class="panel panel-primary">
+        <div id="license-panel" class="panel panel-primary">
             <div class="panel-body">
-                <h3 class="text-on-pannel text-primary"><strong class="text-uppercase"> License </strong></h3>
+                <h3 class="text-on-pannel text-primary"><strong class="text-uppercase" id="license"> License </strong></h3>
                 <p>
                 <div id="license-detail">
                     All of the data listed here is available under the prepublication data sharing principle of the
@@ -152,47 +152,57 @@
 
 
     $(document).ready(function () {
-        var irods_id = "2.11899";
+        var irods_id = $("body").attr('id');
+
+        console.log('irods_id: ' + irods_id);
 
         var rest_url = G_METADATA_API_URL_S + "get?id=" + irods_id + "&output_format=json";
 
-        var project_uuid;
-        $.ajax(rest_url, {
-            dataType: "json",
-            success: function (data, status) {
-                if (status === "success") {
-                    var jsonArray = data;
-                    $.each(jsonArray, function (i, jsonObject) {
-                        if (jsonObject.atrribute == "project_uuid") {
-                            project_uuid == jsonObject.value;
-
-                        }
-                    })
-
-                }
-            }
-        });
+        var project_uuid = null;
+        // $.ajax(rest_url, {
+        //     dataType: "json",
+        //     success: function (data, status) {
+        //         if (status === "success") {
+        //             var jsonArray = data;
+        //             $.each(jsonArray, function (i, jsonObject) {
+        //                 if (jsonObject.atrribute == "project_uuid") {
+        //                     project_uuid == jsonObject.value;
+        //
+        //                 }
+        //             })
+        //
+        //         }
+        //     }
+        // });
 
         //test
         project_uuid = "testuuid";
 
-        $.ajax(elasticsearch_url + project_uuid, {
-            dataType: "json",
-            success: function (data, status) {
-                if (status === "success") {
-                    $('#projectName').html(data["projectName"]);
-                    $('#description').html(data["description"]);
-                    $('#poi').html(data["poi"]);
-                    if (data["license"] == "torronto") {
-                        $('#license').html("Torronto Agreement");
+        if (project_uuid == null){
+            $('info').hide();
+        } else {
+            $.ajax(elasticsearch_url + project_uuid, {
+                dataType: "json",
+                'type': 'GET',
+                success: function (data) {
+                    console.log('elasticsearch data: ' + JSON.stringify(data));
+                    var projectData = data["_source"];
+                    $('#projectName').html(projectData["projectName"]);
+                    $('#description').html(projectData["description"]);
+                    $('#poi').html(projectData["poi"]);
+                    if (projectData["license"] == "torronto") {
+                        $('#license').html("License - Torronto Agreement");
                         $('#license-detail').html($('#torronto').html());
-                    } else {
-                        $('#license').html(data["license"]);
+                    } else if (projectData["license"] == null) {
+                        $('#license-panel').hide();
+                    }
+                    else {
+                        $('#license-detail').html(data["license"]);
                     }
 
                 }
-            }
-        });
+            });
+        }
     });
 
 
