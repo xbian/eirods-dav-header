@@ -16,18 +16,35 @@
     <img class="logo" alt="The Earlham Institute"
          src="https://grassroots.tools/eirods_dav_files/images/earlham-institute-logo.png"><br/>Welcome to public data
     at the Earlham Institute
-
-    <div id="projectName"></div>
-
-    <div id="description"></div>
-
-    <div id="poi"></div>
-
-
-    <div id="license">
-
+    <div class="panel panel-default">
+        <div class="panel-heading">Project Name</div>
+        <div class="panel-body">
+            <div id="projectName"></div>
+        </div>
     </div>
 
+    <div class="panel panel-default">
+        <div class="panel-heading">Description</div>
+        <div class="panel-body">
+            <div id="description"></div>
+        </div>
+    </div>
+
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Personal</div>
+        <div class="panel-body">
+            <div id="poi"></div>
+        </div>
+    </div>
+
+
+    <div class="panel panel-default">
+        <div class="panel-heading">License</div>
+        <div class="panel-body">
+            <div id="license"></div>
+        </div>
+    </div>
 
     <div id="torronto" style="visibility: hidden ! improtant;">
         All of the data listed here is available under the prepublication data sharing principle of the <a
@@ -70,8 +87,8 @@
             success: function (data, status) {
                 if (status === "success") {
                     var jsonArray = data;
-                    $.each(jsonArray, function(i, jsonObject) {
-                        if (jsonObject.atrribute == "project_uuid"){
+                    $.each(jsonArray, function (i, jsonObject) {
+                        if (jsonObject.atrribute == "project_uuid") {
                             project_uuid == jsonObject.value;
 
                         }
@@ -81,7 +98,7 @@
             }
         });
 
-    //test
+        //test
         project_uuid = "testuuid";
 
         $.ajax(elasticsearch_url + project_uuid, {
@@ -91,7 +108,7 @@
                     $('#projectName').html(data["projectName"]);
                     $('#description').html(data["description"]);
                     $('#poi').html(data["poi"]);
-                    if (data["license"] = "torront"){
+                    if (data["license"] = "torront") {
 
                         $('#license').html($('#torronto').html());
                     } else {
