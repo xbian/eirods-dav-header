@@ -14,8 +14,27 @@
 <style type="text/css">
     body {
         width: 80%;
-        margin-left: 20px;
+        margin: 10px auto 10px auto ! important;
     }
+
+    h2 {
+        color: #18bc9c ! important;
+    }
+
+    .text-primary{
+        color: rgba(198, 31, 22, 1) ! important;
+    }
+
+    a, a.active, a:active, a:focus, a:hover {
+        color: #18bc9c;
+        text-decoration: underline;
+        -webkit-text-underline-position: under;
+        -ms-text-underline-position: below;
+        text-underline-position: under;
+        /*text-underline-position: under;*/
+        outline: 0
+    }
+
 
 </style>
 <header>
@@ -25,35 +44,74 @@
     Welcome to public data
     at the Earlham Institute
     <br/>
-    <br/>
-    <div class="panel panel-primary">
-        <div class="panel-heading">Project Name</div>
-        <div class="panel-body">
-            <div id="projectName"></div>
+    <div id="info">
+        <br/>
+        <h2 id="projectName" style="color: #18bc9c;">Official launch of the Open Wild Wheat Consortium</h2>
+        <i>
+            <small>
+                <div id="poi">Wulff, Burkard</div>
+            </small>
+        </i>
+        <p>
+        <div id="description" style="text-align: justify">A new genetic directory launched today will enable researchers
+            and breeders to scan the genomes of wild relatives of modern wheat to find disease-fighting properties lost
+            to domestication.
+
+            The time-travelling trawl is possible following the launch of the Open Wild Wheat, a directory which
+            includes the genetic sequences of 150 wild wheats belonging to a goat grass species called Aegilops tauschii
+            ssp. strangulata.This wild relative, found in the fertile crescent round the Caspian sea, has contributed
+            the D genome pillar, one of the three genomes found in bread wheat.
+
+            The directory is the crowd-funded outcome of an international consortium led by wheat researchers at the
+            John Innes Centre, Norwich, UK, and Kansas State University. Contributors from academic institutions and
+            industry spanning 15 countries raised $150,000 to fund the sequencing.
+
+            Dr Brande Wulff, from the John Innes Centre, explained the motivation behind the project: “If you sequence a
+            single individual you just get a snapshot. So, to understand the whole genetic diversity that comes with a
+            species we decided to sequence not one but 150.”
+
+
         </div>
-    </div>
+        </p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">Description</div>
-        <div class="panel-body">
-            <div id="description"></div>
+        <div class="panel panel-primary">
+            <div class="panel-body">
+                <h3 class="text-on-pannel text-primary"><strong class="text-uppercase"> License </strong></h3>
+                <p>
+                <div id="license-detail">
+                    All of the data listed here is available under the prepublication data sharing principle of the
+                    <a
+                            href="https://www.nature.com/articles/461168a">Toronto agreement</a>.
+                    By using this data, you agree to:
+
+                    <ul>
+                        <li>respect the rights of the data producers and contributors to analyze and publish the
+                            first global
+                            analyses and certain other reserved analyses of this data set in a peer-reviewed
+                            publication.
+                        </li>
+                        <li>not redistribute, release, or otherwise provide access to the data to anyone outside of
+                            the group, until
+                            the data has been published &amp; submitted to the public data repositories.
+                        </li>
+                        <li>contact the authors to discuss any plans to publish data or analyses that utilize this
+                            data to avoid the
+                            overlap of any planned analyses.
+                        </li>
+                        <li>fully cite the prepublication data along with any applicable versioning details.</li>
+                        <li>understand that this data as accessed is precompetitive and is not patentable in its
+                            present state.
+                        </li>
+                    </ul>
+                    This agreement does not expire by time but only upon publication of the first global analysis by
+                    the data
+                    producers and contributors.
+
+                </div>
+                </p>
+            </div>
         </div>
-    </div>
 
-
-    <div class="panel panel-default">
-        <div class="panel-heading">Personal</div>
-        <div class="panel-body">
-            <div id="poi"></div>
-        </div>
-    </div>
-
-
-    <div class="panel panel-default">
-        <div class="panel-heading">License</div>
-        <div class="panel-body">
-            <div id="license"></div>
-        </div>
     </div>
 
     <div id="torronto" style="display:none ! important; ">
@@ -62,19 +120,25 @@
         By using this data, you agree to:
 
         <ul>
-            <li>respect the rights of the data producers and contributors to analyze and publish the first global
+            <li>respect the rights of the data producers and contributors to analyze and publish the first
+                global
                 analyses and certain other reserved analyses of this data set in a peer-reviewed publication.
             </li>
-            <li>not redistribute, release, or otherwise provide access to the data to anyone outside of the group, until
+            <li>not redistribute, release, or otherwise provide access to the data to anyone outside of the
+                group, until
                 the data has been published &amp; submitted to the public data repositories.
             </li>
-            <li>contact the authors to discuss any plans to publish data or analyses that utilize this data to avoid the
+            <li>contact the authors to discuss any plans to publish data or analyses that utilize this data to
+                avoid the
                 overlap of any planned analyses.
             </li>
             <li>fully cite the prepublication data along with any applicable versioning details.</li>
-            <li>understand that this data as accessed is precompetitive and is not patentable in its present state.</li>
+            <li>understand that this data as accessed is precompetitive and is not patentable in its present
+                state.
+            </li>
         </ul>
-        This agreement does not expire by time but only upon publication of the first global analysis by the data
+        This agreement does not expire by time but only upon publication of the first global analysis by the
+        data
         producers and contributors.
     </div>
 </header>
@@ -84,11 +148,11 @@
     //remove when integration to eirods-dav
     var G_METADATA_API_URL_S = "/data/api/metadata/";
 
-    var elasticsearch_url = "/elastic-search/irods/project/";
+    var elasticsearch_url = "https://grassroots.tools/elastic-search/irods/project/";
 
 
     $(document).ready(function () {
-        var irods_id="2.11899";
+        var irods_id = "2.11899";
 
         var rest_url = G_METADATA_API_URL_S + "get?id=" + irods_id + "&output_format=json";
 
@@ -120,8 +184,8 @@
                     $('#description').html(data["description"]);
                     $('#poi').html(data["poi"]);
                     if (data["license"] == "torronto") {
-
-                        $('#license').html($('#torronto').html());
+                        $('#license').html("Torronto Agreement");
+                        $('#license-detail').html($('#torronto').html());
                     } else {
                         $('#license').html(data["license"]);
                     }
