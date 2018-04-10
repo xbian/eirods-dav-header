@@ -2,21 +2,31 @@
 <script type="text/javascript" src="header-scripts/script.js"></script>
 
 <!-- font awesome -->
-<link href="header-scripts/fontawesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="/eirods_dav_files/header-scripts/fontawesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
 
 <!-- jQuery -->
 <!--<script type="text/javascript" src="scripts/jquery-1.11.3.min.js"></script>-->
 
 <!-- bootstrap -->
-<script src="header-scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<link href="header-scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<script src="/eirods_dav_files/header-scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<link href="/eirods_dav_files/header-scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 
+<style type="text/css">
+    body {
+        width: 80%;
+        margin-left: 20px;
+    }
 
+</style>
 <header>
     <img class="logo" alt="The Earlham Institute"
-         src="https://grassroots.tools/eirods_dav_files/images/earlham-institute-logo.png"><br/>Welcome to public data
+         src="https://grassroots.tools/eirods_dav_files/images/earlham-institute-logo.png"><br/>
+    <br/>
+    Welcome to public data
     at the Earlham Institute
-    <div class="panel panel-default">
+    <br/>
+    <br/>
+    <div class="panel panel-primary">
         <div class="panel-heading">Project Name</div>
         <div class="panel-body">
             <div id="projectName"></div>
@@ -46,7 +56,7 @@
         </div>
     </div>
 
-    <div id="torronto" style="visibility: hidden ! improtant;">
+    <div id="torronto" style="display:none ! important; ">
         All of the data listed here is available under the prepublication data sharing principle of the <a
             href="https://www.nature.com/articles/461168a">Toronto agreement</a>.
         By using this data, you agree to:
@@ -78,6 +88,7 @@
 
 
     $(document).ready(function () {
+        var irods_id="2.11899";
 
         var rest_url = G_METADATA_API_URL_S + "get?id=" + irods_id + "&output_format=json";
 
@@ -108,7 +119,7 @@
                     $('#projectName').html(data["projectName"]);
                     $('#description').html(data["description"]);
                     $('#poi').html(data["poi"]);
-                    if (data["license"] = "torront") {
+                    if (data["license"] == "torronto") {
 
                         $('#license').html($('#torronto').html());
                     } else {
