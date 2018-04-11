@@ -43,7 +43,6 @@
     <br/>
     Welcome to public data
     at the Earlham Institute
-    <br/>
     <div id="info">
         <br/>
         <h2 id="projectName" style="color: #18bc9c;"></h2>
@@ -56,39 +55,12 @@
         <div id="description" style="text-align: justify"></div>
         </p>
 
-        <div id="license-panel" class="panel panel-primary">
+        <div id="license-panel" class="panel panel-primary" style="display:none ! important; ">
             <div class="panel-body">
-                <h3 class="text-on-pannel text-primary"><strong class="text-uppercase" id="license"> License </strong></h3>
+                <h3 class="text-on-pannel text-primary"><strong class="text-uppercase" id="license"> License </strong>
+                </h3>
                 <p>
                 <div id="license-detail">
-                    All of the data listed here is available under the prepublication data sharing principle of the
-                    <a
-                            href="https://www.nature.com/articles/461168a">Toronto agreement</a>.
-                    By using this data, you agree to:
-
-                    <ul>
-                        <li>respect the rights of the data producers and contributors to analyze and publish the
-                            first global
-                            analyses and certain other reserved analyses of this data set in a peer-reviewed
-                            publication.
-                        </li>
-                        <li>not redistribute, release, or otherwise provide access to the data to anyone outside of
-                            the group, until
-                            the data has been published &amp; submitted to the public data repositories.
-                        </li>
-                        <li>contact the authors to discuss any plans to publish data or analyses that utilize this
-                            data to avoid the
-                            overlap of any planned analyses.
-                        </li>
-                        <li>fully cite the prepublication data along with any applicable versioning details.</li>
-                        <li>understand that this data as accessed is precompetitive and is not patentable in its
-                            present state.
-                        </li>
-                    </ul>
-                    This agreement does not expire by time but only upon publication of the first global analysis by
-                    the data
-                    producers and contributors.
-
                 </div>
                 </p>
             </div>
@@ -96,7 +68,7 @@
 
     </div>
 
-    <div id="torronto" style="display:none ! important; ">
+    <div id="toronto" style="display:none ! important; ">
         All of the data listed here is available under the prepublication data sharing principle of the <a
             href="https://www.nature.com/articles/461168a">Toronto agreement</a>.
         By using this data, you agree to:
@@ -141,50 +113,50 @@
         var rest_url = G_METADATA_API_URL_S + "get?id=" + irods_id + "&output_format=json";
 
         var project_uuid = null;
-        // $.ajax(rest_url, {
-        //     dataType: "json",
-        //     success: function (data, status) {
-        //         if (status === "success") {
-        //             var jsonArray = data;
-        //             $.each(jsonArray, function (i, jsonObject) {
-        //                 if (jsonObject.atrribute == "project_uuid") {
-        //                     project_uuid == jsonObject.value;
-        //
-        //                 }
-        //             })
-        //
-        //         }
-        //     }
-        // });
+        $.ajax(rest_url, {
+            dataType: "json",
+            success: function (data) {
+                console.log('imeta data: ' + JSON.stringify(data));
+                $.each(data, function (i, jsonObject) {
+                    console.log('imeta data1: ' + JSON.stringify(jsonObject));
+                    if (jsonObject["attribute"] == "project_uuid") {
+                        project_uuid = jsonObject["value"];
+                        if (project_uuid != null) {
 
-        //test
-        project_uuid = "testuuid3";
+                            $.ajax(elasticsearch_url + project_uuid, {
+                                dataType: "json",
+                                'type': 'GET',
+                                success: function (data) {
+                                    console.log('elasticsearch data: ' + JSON.stringify(data));
 
-        if (project_uuid == null){
-            $('info').hide();
-        } else {
-            $.ajax(elasticsearch_url + project_uuid, {
-                dataType: "json",
-                'type': 'GET',
-                success: function (data) {
-                    console.log('elasticsearch data: ' + JSON.stringify(data));
-                    var projectData = data["_source"];
-                    $('#projectName').html(projectData["projectName"]);
-                    $('#description').html(projectData["description"]);
-                    $('#poi').html(projectData["poi"]);
-                    if (projectData["license"] == "torronto") {
-                        $('#license').html("License - Torronto Agreement");
-                        $('#license-detail').html($('#torronto').html());
-                    } else if (projectData["license"] == null) {
-                        $('#license-panel').hide();
+                                    var projectData = data["_source"];
+
+                                    $('#projectName').html(projectData["projectName"]);
+
+                                    $('#description').html(projectData["description"]);
+
+                                    $('#poi').html(projectData["poi"]);
+
+                                    if (projectData["license"] == "toronto") {
+                                        $('#license').html("License - Toronto Agreement");
+                                        $('#license-detail').html($('#toronto').html());
+                                        $('#license-panel').show();
+                                    } else if (projectData["license"] == null) {
+                                        $('#license-panel').hide();
+                                    }
+                                    else {
+                                        $('#license-detail').html(data["license"]);
+                                    }
+
+                                }
+                            });
+                        } else {
+                            $('#info').hide();
+                        }
                     }
-                    else {
-                        $('#license-detail').html(data["license"]);
-                    }
-
-                }
-            });
-        }
+                })
+            }
+        });
     });
 
 
