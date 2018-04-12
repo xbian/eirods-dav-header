@@ -58,10 +58,8 @@
             <div class="panel-body">
                 <h3 class="text-on-pannel text-primary"><strong class="text-uppercase" id="license"> License </strong>
                 </h3>
-                <p>
                 <div id="license-detail">
                 </div>
-                </p>
             </div>
         </div>
     </div>
@@ -146,6 +144,9 @@
                                         $('#license-detail').html(data["license"]);
                                     }
 
+                                },
+                                error: function(e) {
+                                    console.log('Error getting elasticsearch!', e);
                                 }
                             });
                         } else {
@@ -153,6 +154,9 @@
                         }
                     }
                 })
+            },
+            error: function(e) {
+                console.log('Error getting imeta! ', e);
             }
         });
     });
